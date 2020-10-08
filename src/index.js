@@ -5,6 +5,7 @@ import "dotenv/config";
 import models, { connectDb } from "./models";
 
 const path = require("path");
+var ObjectId = require('mongodb').ObjectID;
 const app = express();
 
 app.use(cors());
@@ -25,6 +26,20 @@ app.get("/api/accounts", (req, res) => {
 		}
 	});
 });
+
+app.put("/api/accounts", (req, res) => {
+	const {id, status} = req.body;
+	models.Account.updateOne(
+		{ _id: ObjectId(id)},
+		{$set :{'status':status}},
+		 (error, data) => {
+			if (data) {
+				return res.send({
+					data,
+				});
+			}
+		})
+})
 
 connectDb().then(async () => {
 
