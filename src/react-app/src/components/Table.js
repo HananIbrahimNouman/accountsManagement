@@ -5,7 +5,6 @@ import { Table, TableHead, TableRow, TableCell, TablePagination } from '@materia
 export default function useTable(records, headCells, length) {
 
     const [page, setPage] = useState(0)
-    console.log(records,"recordsrecords")
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);

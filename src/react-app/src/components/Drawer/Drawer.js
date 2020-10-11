@@ -16,7 +16,11 @@ const useStyles = makeStyles({
     width: "120px"
   },
   drawerList: {
-    width: "120px"
+    width: "150px"
+  },
+  drawerLink:{
+    display:'flex',
+    justifyContent: 'space-around'
   }
 });
 
@@ -30,7 +34,7 @@ const Drawer = () => {
               const { title, path, icon } = item;
               return (
                 <ListItem key={title} >
-                  <Link to={path}>
+                  <Link to={path} className={classes.drawerLink}>
                     <ListItemIcon>{icon}</ListItemIcon>
                     <ListItemText primary={title} />
                   </Link>

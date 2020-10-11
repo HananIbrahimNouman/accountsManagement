@@ -3,6 +3,13 @@ import request from '../../Services/ApiService';
  const count = {
     state: {
         accounts: [],
+        stats:{
+          totalBalance: 0,
+          pending:0,
+          closed:0,
+          funded:0,
+          approved:0,
+        } 
     },
     reducers: {
         setAccounts(state, accounts) {
@@ -11,6 +18,12 @@ import request from '../../Services/ApiService';
               accounts,
             };
         },
+        setStats(state, stats) {
+          return {
+            ...state,
+            stats,
+          };
+      },
     },
     effects: dispatch => ({
         async fetchAccounts(payload, state) {
@@ -22,6 +35,7 @@ import request from '../../Services/ApiService';
           
               if (!response.error) {
                  dispatch.accounts.setAccounts(response.data);
+                 dispatch.accounts.updateStats();                     
               }
             } catch (error) {
              console.log('error!')
@@ -46,12 +60,22 @@ import request from '../../Services/ApiService';
                     prevAccount.status= status;
                     return prevAccount;
                 })
-                dispatch.accounts.setAccounts(newAccounts);            
+                dispatch.accounts.setAccounts(newAccounts);   
+                dispatch.accounts.updateStats();                     
               }
             } catch (error) {
              console.log('error!')
             }
           },
+          updateStats(payload, state){
+            let Stats= {totalBalance: 0,pending:0,closed:0,funded:0,approved:0}
+            for(var i=0;i<state.accounts.accounts.length;i++){
+              Stats[state.accounts.accounts[i].status]+= 1;
+              Stats.totalBalance += state.accounts.accounts[i].balance
+            }
+
+            dispatch.accounts.setStats(Stats)    
+          }
     }),
 }
 

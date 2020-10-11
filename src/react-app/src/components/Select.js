@@ -6,21 +6,20 @@ import Select from '@material-ui/core/Select';
 
 const useStyles = makeStyles(() => ({
   formControl: {
-    minWidth: '200px',
+    minWidth: '150px',
   },
 }));
 
 
-export default function ControlledOpenSelect({currentValue,id, setValue,setId, options}) {
+export default function useSelect({currentValue,id, setValue,setId, options}) {
  
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
   const handleChange = (event) => {
-    console.log(event.target.value,"event.target.valueevent.target.value")
     setValue(event.target.value);
-    setId(id)
+    if (id) setId(id)
   };
 
   const handleClose = () => {

@@ -1,86 +1,90 @@
 import React, { useState, useEffect } from 'react';
-import FilterListIcon from '@material-ui/icons/FilterList'; 
-import { Paper,makeStyles, TextField, TableBody, TableRow, TableCell, Toolbar, InputAdornment } from '@material-ui/core';
+import { Paper, makeStyles, TableBody, TableRow, TableCell, Toolbar, InputAdornment } from '@material-ui/core';
 
-import useTable from "../../components/useTable";
+import Table from "../../components/Table";
 import Select from "../../components/Select";
+import Stats from "./components/index.js";
 
 const useStyles = makeStyles(theme => ({
   pageContent: {
       margin: '100px auto auto auto',
       padding: theme.spacing(3),
-      width:'75%',
+      width:'50%',
   },
-  searchInput: {
-      width: '75%'
+  searchSelect: {
+      marginLeft: 'auto'
+  },
+  filterLabel: {
+    marginRight:'10px',
+  },
+  ToolFilter: {
+    padding: '0 0 0 60%',
   }
 }))
 
 const Accounts = ({
   accounts,
-  updateAccount
+  updateAccount,
+  setStats
 }) => {
 
-  console.log(accounts,"accountssssss")
   const classes = useStyles();
+
+  //Those are local states, they wont need to be shared among other components.
   const [filteredRecords, setFilteredRecords] = useState(accounts)
-  const [value, setValue] = React.useState('');
+  const [accountStatusValue, setAccountStatusValue] = React.useState(''); //used to change an account status
   const [id, setId] = React.useState('');
-  const length = accounts.length;
+  const [searchedValue, setSearchedValue] = React.useState('ALL');
 
   const {
         TblContainer,
         TblPagination,
         recordsAfterPaging
-    } = useTable(filteredRecords, ['id', 'balance', 'status'], length);
+    } = Table(filteredRecords, ['id', 'balance', 'status'], accounts.length);
 
-  const handleSearch = e => {
-    let target = e.target;
-    setFilteredRecords(filteredRecords.filter(x => x.status.includes(target.value))) 
+  const handleSearch = selectedStatus => {
+    setSearchedValue(selectedStatus);
+    if(selectedStatus == 'ALL') return setFilteredRecords(accounts);  
+    setFilteredRecords(accounts.filter(x => x.status.includes(selectedStatus))) 
   }
-  
+
+  const fillAccountStatusSelectOptions = item => {
+    let options = [];
+    if(item.status !== 'closed' && !(item.status == 'funded' && item.balance !== 0 )) options.push('closed');
+    if(item.status == 'approved') options.push('funded');
+    if(item.status == 'pending') options.push('approved');
+    options.push(item.status)
+    return options;
+  }
 
   useEffect(() => {
-    if(value) updateAccount({id,status:value})
-  }, [value]);
+    if(accountStatusValue) updateAccount({id,status:accountStatusValue})
+  }, [accountStatusValue]);
 
   useEffect(() => {
     setFilteredRecords(accounts)
-  }, [accounts]);
+  }, [accounts]); //for refresh purpose and when accounts change
 
 
   return (
     <>
       <Paper className={classes.pageContent} >
-        <Toolbar>
-        <TextField
-            className={classes.searchInput}
-            variant="outlined"
-            label="Filter By Status"
-            onChange={handleSearch}
-            InputProps={{
-              startAdornment: (<InputAdornment position="start">
-                  <FilterListIcon />
-              </InputAdornment>)
-          }}
-        />
+        <Stats/>
+        <Toolbar className={classes.ToolFilter}>
+          <p className={classes.filterLabel}>Filter By Status</p>
+          <Select currentValue={searchedValue}  setValue={handleSearch}  options={['ALL','pending','approved','funded','closed']}/>
         </Toolbar>
         <TblContainer>
             <TableBody>
                 {
                   
                   recordsAfterPaging().map(item =>{
-                    let options = [];
-                    if(item.status !== 'closed' && !(item.status == 'funded' && item.balance == 0 )) options.push('closed');
-                    if(item.status == 'approved') options.push('funded');
-                    if(item.status == 'pending') options.push('approved');
-                    options.push(item.status)
-
+                    let options = fillAccountStatusSelectOptions(item);
                     return (
                       <TableRow key={item._id}>
                         <TableCell>{item._id}</TableCell>
                         <TableCell>{item.balance}</TableCell>
-                        <TableCell><Select currentValue={item.status} id={item._id} setValue={setValue} setId={setId} options={options}/></TableCell>
+                        <TableCell><Select currentValue={item.status} id={item._id} setValue={setAccountStatusValue} setId={setId} options={options}/></TableCell>
                     </TableRow>
                     )
                   })
