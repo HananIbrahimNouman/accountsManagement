@@ -1,7 +1,7 @@
 
 ### Installation
 
-- Create a `.env` file in the root directory of this project and populate it with the required values. See `.env` file for more info.
+- Create a `.env` and `.babelrc` file in the root directory and paste values from the remote repo, change directory from the root one to src/react-app and create `.env` and paste the value from remote repo. 
 
 
 ### Steps to run the project
