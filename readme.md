@@ -1,7 +1,8 @@
 
 ### Installation
 
-- Create a `.env` and `.babelrc` file in the root directory and paste values from the remote repo, change directory from the root one to src/react-app and create `.env` and paste the value from remote repo. 
+- Create a `.env` and `.babelrc` file in the root directory and paste props from the remote repo with you values, change directory from the root to src/react-app and create `.env` and paste the prop from remote repo with your value.
+- Change the data in init_data to your data with (funded, pending, approved, closed) statuses. 
 
 
 ### Steps to run the project

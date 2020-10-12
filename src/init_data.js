@@ -19,4 +19,17 @@ export const accounts = [
 		balance: 10000.0,
 		status: "funded",
 	},
+	{
+		balance: 0,
+		status: "pending",
+	},
+	{
+		balance: 0,
+		status: "funded",
+	},
+	{
+		balance: 0,
+		status: "closed",
+	},
+	
 ];

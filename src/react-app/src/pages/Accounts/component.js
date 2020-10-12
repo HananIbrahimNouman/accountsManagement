@@ -58,7 +58,7 @@ const Accounts = ({
 
   useEffect(() => {
     if(accountStatusValue) updateAccount({id,status:accountStatusValue})
-  }, [accountStatusValue]);
+  }, [id]);
 
   useEffect(() => {
     setFilteredRecords(accounts)
