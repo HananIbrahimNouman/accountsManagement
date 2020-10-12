@@ -1,4 +1,5 @@
 import request from '../../Services/ApiService';
+import { setLS, getLS } from '../../Utils/localStorage';
 
  const count = {
     state: {
@@ -35,7 +36,8 @@ import request from '../../Services/ApiService';
           
               if (!response.error) {
                  dispatch.accounts.setAccounts(response.data);
-                 dispatch.accounts.updateStats();                     
+                 dispatch.accounts.updateStats();  
+                 setLS('accounts', JSON.stringify(response.data));  // will be needed in future or use rematch/persist                                  
               }
             } catch (error) {
              console.log('error!')
@@ -61,14 +63,17 @@ import request from '../../Services/ApiService';
                     return prevAccount;
                 })
                 dispatch.accounts.setAccounts(newAccounts);   
-                dispatch.accounts.updateStats();                     
+                dispatch.accounts.updateStats();    
+                setLS('accounts', JSON.stringify(newAccounts));                 
               }
             } catch (error) {
              console.log('error!')
             }
           },
+          //shouldn't be in the model file, but in utilities in future. 
           updateStats(payload, state){
             let Stats= {totalBalance: 0,pending:0,closed:0,funded:0,approved:0}
+            //remember to change accounts to be an object so we don't update all values
             for(var i=0;i<state.accounts.accounts.length;i++){
               Stats[state.accounts.accounts[i].status]+= 1;
               Stats.totalBalance += state.accounts.accounts[i].balance

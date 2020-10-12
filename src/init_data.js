@@ -1,6 +1,6 @@
 export const accounts = [
 	{
-		balance: 50000.0,
+		balance: 0,
 		status: "pending",
 	},
 	{
@@ -8,11 +8,11 @@ export const accounts = [
 		status: "funded",
 	},
 	{
-		balance: 30000.0,
+		balance: 0,
 		status: "closed",
 	},
 	{
-		balance: 20000.0,
+		balance: 0,
 		status: "approved",
 	},
 	{

@@ -25,7 +25,6 @@ const useStyles = makeStyles(theme => ({
 const Accounts = ({
   accounts,
   updateAccount,
-  setStats
 }) => {
 
   const classes = useStyles();
@@ -69,13 +68,13 @@ const Accounts = ({
   return (
     <>
       <Paper className={classes.pageContent} >
-        <Stats/>
+        <Stats data-test-id="accounts__stats"/>
         <Toolbar className={classes.ToolFilter}>
           <p className={classes.filterLabel}>Filter By Status</p>
-          <Select currentValue={searchedValue}  setValue={handleSearch}  options={['ALL','pending','approved','funded','closed']}/>
+          <Select currentValue={searchedValue}  setValue={handleSearch}  options={['ALL','pending','approved','funded','closed']} data-test-id="accounts__filter"/>
         </Toolbar>
-        <TblContainer>
-            <TableBody>
+        <TblContainer >
+            <TableBody data-test-id="accounts__table">
                 {
                   
                   recordsAfterPaging().map(item =>{
@@ -84,7 +83,7 @@ const Accounts = ({
                       <TableRow key={item._id}>
                         <TableCell>{item._id}</TableCell>
                         <TableCell>{item.balance}</TableCell>
-                        <TableCell><Select currentValue={item.status} id={item._id} setValue={setAccountStatusValue} setId={setId} options={options}/></TableCell>
+                        <TableCell><Select data-test-id="account__select" currentValue={item.status} id={item._id} setValue={setAccountStatusValue} setId={setId} options={options}/></TableCell>
                     </TableRow>
                     )
                   })
